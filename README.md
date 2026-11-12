@@ -37,24 +37,36 @@ I `index.html`: företagsnamn ("Jotal Rehab"), texter och behandlingar.
 npx serve .
 ```
 
-## Deploya till Azure (första gången)
+## Driftmiljö
 
-1. **Pusha till GitHub** – `main`-branchen i `jotal/rehab`.
-2. **Skapa Static Web App** i Azure-portalen: *Create a resource → Static Web App*
-   - Resource group: `rg-jotal-web`, Name: `jotal-rehab`, Plan: **Free**, Region: West Europe
-   - Source: **GitHub** → `jotal/rehab`, branch `main`
-   - Build preset: **Custom**, App location: `/`, Api location: *(tomt)*, Output location: *(tomt)*
-3. Azure lägger till en GitHub Actions-workflow i repot. Gör `git pull` lokalt för att få ner den.
-4. Efter ~1 min är sajten live på `https://<namn>.azurestaticapps.net`.
+| | |
+|---|---|
+| Azure-prenumeration | Azure subscription (tenant `jotal.onmicrosoft.com`) |
+| Resursgrupp | `rg-jotal-web` |
+| Static Web App | `jotal-rehab` (Free, East US 2 – West Europe tog inte emot nya appar) |
+| Standardadress | https://brave-mushroom-028a75f0f.8.azurestaticapps.net |
+| Egen domän | https://www.jotal.se (CNAME hos Loopia, certifikat från Azure) |
 
-Därefter: varje `git push` till `main` deployas automatiskt. Pull requests får en egen förhandsvisnings-URL.
+## Deploy
 
-## Koppla www.jotal.se (DNS hos Loopia)
+Varje `git push` till `main` deployas automatiskt via GitHub Actions
+(`.github/workflows/azure-static-web-apps.yml`). Pull requests mot `main` får en egen
+förhandsvisnings-URL som stängs när PR:en stängs. En deploy kan också startas manuellt under
+*Actions → Deploy till Azure Static Web Apps → Run workflow*.
 
-1. Azure: Static Web App → **Custom domains → Add → Custom domain on other DNS** → `www.jotal.se`.
-2. Loopia: Kundzonen → `jotal.se` → **DNS-editor** → subdomän `www`:
-   - ta bort befintliga A/AAAA-poster
-   - lägg till **CNAME** → `<namn>.azurestaticapps.net`
-3. Azure: klicka **Validate**. HTTPS-certifikat skapas automatiskt (5–30 min).
-4. Rotdomänen `jotal.se`: ställ in vidarebefordring till `https://www.jotal.se` hos Loopia
-   (Loopia stöder inte ALIAS-poster). Alternativt flytta DNS till Azure DNS och använd en alias-post.
+Workflowen kräver hemligheten `AZURE_STATIC_WEB_APPS_API_TOKEN` i repot
+(*Settings → Secrets and variables → Actions*). Ny token hämtas med:
+
+```bash
+az staticwebapp secrets list -n jotal-rehab -g rg-jotal-web --query properties.apiKey -o tsv
+```
+
+## DNS hos Loopia
+
+| Subdomän | Typ | Värde |
+|---|---|---|
+| `www` | CNAME | `brave-mushroom-028a75f0f.8.azurestaticapps.net.` |
+| `@` | MX / TXT | Loopias e-post – rör inte |
+
+Rotdomänen `jotal.se` ska vidarebefordras till `https://www.jotal.se` hos Loopia
+(Loopia stöder inte ALIAS-poster). Alternativt: flytta DNS till Azure DNS och använd en alias-post.
