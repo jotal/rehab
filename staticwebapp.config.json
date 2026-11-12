@@ -1,0 +1,24 @@
+{
+  "responseOverrides": {
+    "404": {
+      "rewrite": "/404.html",
+      "statusCode": 404
+    }
+  },
+  "routes": [
+    {
+      "route": "/css/*",
+      "headers": { "cache-control": "public, max-age=86400" }
+    },
+    {
+      "route": "/js/*",
+      "headers": { "cache-control": "public, max-age=86400" }
+    }
+  ],
+  "globalHeaders": {
+    "Content-Security-Policy": "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; form-action 'self' mailto:; frame-ancestors 'none'; base-uri 'self'",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+  }
+}
