@@ -18,8 +18,8 @@ staticwebapp.config.json   Azure-inställningar (404, säkerhetsheaders, cache)
 
 Överst i `js/main.js` (`CONFIG`):
 
-- `email` – dit bokningsförfrågningar går (t.ex. `info@jotal.se` – kontrollera att adressen faktiskt tar emot mejl)
-- `phoneDisplay` / `phoneLink` – riktigt telefonnummer
+- `email` – dit bokningsförfrågningar går (nu `boka@jotal.se` – kontrollera att adressen faktiskt tar emot mejl)
+- `phoneDisplay` / `phoneLink` – telefonnummer (tomt = telefonraden döljs)
 - `openingHours` och `slotMinutes` – vilka tider som går att välja
 - `externalBookingUrl` – om du skaffar ett bokningssystem (Bokadirekt, Timma, Calendly …), klistra in länken så visas en knapp
 

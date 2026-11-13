@@ -3,11 +3,12 @@
 // ============================================================
 const CONFIG = {
   // Dit bokningsförfrågningar skickas (öppnas i besökarens e-postprogram)
-  email: "info@jotal.se",
+  email: "boka@jotal.se",
 
-  // Telefonnummer: visning och internationellt format för tel:-länken
-  phoneDisplay: "070-000 00 00",
-  phoneLink: "+46700000000",
+  // Telefonnummer: visning och internationellt format för tel:-länken.
+  // Lämna tomt för att dölja telefonraden, t.ex. phoneDisplay: "070-123 45 67", phoneLink: "+46701234567"
+  phoneDisplay: "",
+  phoneLink: "",
 
   // Om du börjar använda ett bokningssystem (t.ex. Bokadirekt, Timma, Calendly),
   // klistra in länken här så visas en "Öppna bokningen"-knapp. Lämna tomt annars.
@@ -40,9 +41,12 @@ const CONFIG = {
   const emailLink = document.getElementById("contact-email");
   emailLink.href = "mailto:" + CONFIG.email;
   emailLink.textContent = CONFIG.email;
-  const phoneLink = document.getElementById("contact-phone");
-  phoneLink.href = "tel:" + CONFIG.phoneLink;
-  phoneLink.textContent = CONFIG.phoneDisplay;
+  if (CONFIG.phoneDisplay && CONFIG.phoneLink) {
+    const phoneLink = document.getElementById("contact-phone");
+    phoneLink.href = "tel:" + CONFIG.phoneLink;
+    phoneLink.textContent = CONFIG.phoneDisplay;
+    document.getElementById("contact-phone-row").hidden = false;
+  }
 
   // Externt bokningssystem
   if (CONFIG.externalBookingUrl) {
